@@ -148,7 +148,7 @@
 
 -(void)formDescriptorCellDidSelectedWithFormController:(XLFormViewController *)controller
 {
-    if ([self.rowDescriptor.rowType isEqualToString:XLFormRowDescriptorTypeSelectorPush] || [self.rowDescriptor.rowType isEqualToString:XLFormRowDescriptorTypeSelectorPopover]){
+    if ([self.rowDescriptor.rowType isEqualToString:XLFormRowDescriptorTypeSelectorPush] || [self.rowDescriptor.rowType isEqualToString:XLFormRowDescriptorTypeSelectorPopover] || [self.rowDescriptor.rowType isEqualToString:XLFormRowDescriptorTypeMultipleSelector] || XLFormRowDescriptorTypeMultipleSelectorPopover){
         UIViewController * controllerToPresent = nil;
         if (self.rowDescriptor.action.formSegueIdenfifier){
             [controller performSegueWithIdentifier:self.rowDescriptor.action.formSegueIdenfifier sender:self.rowDescriptor];
