@@ -28,4 +28,8 @@
 
 @interface XLFormSelectorCell : XLFormBaseCell
 
+@property (weak, nonatomic) IBOutlet UILabel *labelDetail;
+
+@property (weak, nonatomic) IBOutlet UILabel *labelTitle;
+
 @end

@@ -33,9 +33,6 @@
 
 @property (nonatomic) UIPickerView * pickerView;
 @property (nonatomic) UIPopoverController *popoverController;
-@property (weak, nonatomic) IBOutlet UILabel *labelDetail;
-
-@property (weak, nonatomic) IBOutlet UILabel *labelTitle;
 
 @end
 
