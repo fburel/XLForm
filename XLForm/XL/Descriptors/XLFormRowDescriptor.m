@@ -289,12 +289,16 @@
         };
     }
     else{
-        self.disablePredicateCache = _disabled;
+        self.hidePredicateCache = _hidden;
     }
-    if ([self.disablePredicateCache boolValue]){
+    if ([self.hidePredicateCache boolValue]){
         [self.cell resignFirstResponder];
+        [self.sectionDescriptor hideFormRow:self];
     }
-    return [self.disablePredicateCache boolValue];
+    else{
+        [self.sectionDescriptor showFormRow:self];
+    }
+    return [self.hidePredicateCache boolValue];
 }
 
 -(id)disabled
