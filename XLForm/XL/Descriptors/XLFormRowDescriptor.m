@@ -289,16 +289,12 @@
         };
     }
     else{
-        self.hidePredicateCache = _hidden;
+        self.disablePredicateCache = _disabled;
     }
-    if ([self.hidePredicateCache boolValue]){
+    if ([self.disablePredicateCache boolValue]){
         [self.cell resignFirstResponder];
-        [self.sectionDescriptor hideFormRow:self];
     }
-    else{
-        [self.sectionDescriptor showFormRow:self];
-    }
-    return [self.hidePredicateCache boolValue];
+    return [self.disablePredicateCache boolValue];
 }
 
 -(id)disabled
@@ -359,7 +355,9 @@
         self.hidePredicateCache = _hidden;
     }
     if ([self.hidePredicateCache boolValue]){
-        [self.cell resignFirstResponder];
+        if ([self.cell isFirstResponder]) {
+            [self.cell resignFirstResponder];
+        }
         [self.sectionDescriptor hideFormRow:self];
     }
     else{
