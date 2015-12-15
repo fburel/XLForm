@@ -15,14 +15,14 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zXd-xe-ARf" userLabel="LabelTitle">
-                        <rect key="frame" x="13" y="11" width="150" height="21"/>
+                        <rect key="frame" x="18" y="11" width="155" height="21"/>
                         <animations/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xwm-89-4wN" userLabel="LabelDetail">
-                        <rect key="frame" x="180" y="11" width="571" height="21"/>
+                        <rect key="frame" x="188" y="11" width="565" height="21"/>
                         <animations/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" red="0.56078431370000004" green="0.56078431370000004" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
@@ -31,14 +31,14 @@
                 </subviews>
                 <animations/>
                 <constraints>
-                    <constraint firstItem="Xwm-89-4wN" firstAttribute="leading" secondItem="zXd-xe-ARf" secondAttribute="trailing" constant="17" id="0jU-oP-U9m"/>
+                    <constraint firstItem="Xwm-89-4wN" firstAttribute="leading" secondItem="zXd-xe-ARf" secondAttribute="trailing" constant="15" id="0jU-oP-U9m"/>
                     <constraint firstItem="Xwm-89-4wN" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="3" id="9Zi-lZ-NG0"/>
                     <constraint firstItem="zXd-xe-ARf" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="3" id="Gip-bW-5hd"/>
                     <constraint firstAttribute="bottomMargin" secondItem="zXd-xe-ARf" secondAttribute="bottom" constant="3.5" id="QOb-FW-dxi"/>
-                    <constraint firstAttribute="leadingMargin" secondItem="zXd-xe-ARf" secondAttribute="leading" constant="-5" id="QUa-cu-QeQ"/>
+                    <constraint firstAttribute="leadingMargin" secondItem="zXd-xe-ARf" secondAttribute="leading" constant="-10" id="QUa-cu-QeQ"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Xwm-89-4wN" secondAttribute="bottom" constant="3.5" id="Tdh-Pg-er9"/>
-                    <constraint firstItem="Xwm-89-4wN" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="172" id="ak3-to-NVq"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="Xwm-89-4wN" secondAttribute="trailing" constant="9" id="o7F-sP-7ha"/>
+                    <constraint firstItem="Xwm-89-4wN" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="180" id="ak3-to-NVq"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="Xwm-89-4wN" secondAttribute="trailing" constant="7" id="o7F-sP-7ha"/>
                 </constraints>
             </tableViewCellContentView>
             <animations/>
