@@ -29,10 +29,10 @@
 #import "XLFormSelectorCell.h"
 #import "NSArray+XLFormAdditions.h"
 
-@interface XLFormSelectorCell() <UIActionSheetDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UIPopoverControllerDelegate>
+@interface XLFormSelectorCell() <UIActionSheetDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UIPopoverPresentationControllerDelegate>
 
 @property (nonatomic) UIPickerView * pickerView;
-@property (nonatomic) UIPopoverController *popoverController;
+@property (nonatomic) UIViewController * popoverStyleViewController;
 
 @end
 
@@ -170,19 +170,23 @@
             selectorViewController.title = self.rowDescriptor.selectorTitle;
             
             if ([self.rowDescriptor.rowType isEqualToString:XLFormRowDescriptorTypeSelectorPopover]) {
-                if (self.popoverController && self.popoverController.popoverVisible) {
-                    [self.popoverController dismissPopoverAnimated:NO];
+                if (self.popoverStyleViewController) {
+                    [self.popoverStyleViewController dismissViewControllerAnimated:YES completion:nil];
                 }
-                self.popoverController = [[UIPopoverController alloc] initWithContentViewController:selectorViewController];
-                self.popoverController.delegate = self;
-                if ([selectorViewController conformsToProtocol:@protocol(XLFormRowDescriptorPopoverViewController)]){
-                    ((id<XLFormRowDescriptorPopoverViewController>)selectorViewController).popoverController = self.popoverController;
-                }
+            
+                self.popoverStyleViewController = selectorViewController;
+                self.popoverStyleViewController.modalPresentationStyle = UIModalPresentationPopover;
+                [self.popoverStyleViewController.presentingViewController presentViewController:self.popoverStyleViewController animated:YES completion:nil];
+                self.popoverStyleViewController.popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirectionAny;
+
                 if (self.detailTextLabel.window){
-                    [self.popoverController presentPopoverFromRect:CGRectMake(0, 0, self.detailTextLabel.frame.size.width, self.detailTextLabel.frame.size.height) inView:self.detailTextLabel permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+                    self.popoverStyleViewController.popoverPresentationController.sourceRect = CGRectMake(0, 0, self.detailTextLabel.frame.size.width, self.detailTextLabel.frame.size.height);
+                    self.popoverStyleViewController.popoverPresentationController.sourceView = self.detailTextLabel;
+                    
                 }
                 else{
-                    [self.popoverController presentPopoverFromRect:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height) inView:self permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+                    self.popoverStyleViewController.popoverPresentationController.sourceRect = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+                    self.popoverStyleViewController.popoverPresentationController.sourceView = self;
                 }
                 [controller.tableView deselectRowAtIndexPath:[controller.tableView indexPathForCell:self] animated:YES];
             }
@@ -196,14 +200,19 @@
             optionsViewController.title = self.rowDescriptor.selectorTitle;
 			
 			if ([self.rowDescriptor.rowType isEqualToString:XLFormRowDescriptorTypeSelectorPopover]) {
-				self.popoverController = [[UIPopoverController alloc] initWithContentViewController:optionsViewController];
-                self.popoverController.delegate = self;
-                optionsViewController.popoverController = self.popoverController;
+                self.popoverStyleViewController = optionsViewController;
+                self.popoverStyleViewController.modalPresentationStyle = UIModalPresentationPopover;
+                [self.popoverStyleViewController.presentingViewController presentViewController:self.popoverStyleViewController animated:YES completion:nil];
+                self.popoverStyleViewController.popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirectionAny;
+                self.popoverStyleViewController.popoverPresentationController.delegate = self;
                 if (self.detailTextLabel.window){
-                    [self.popoverController presentPopoverFromRect:CGRectMake(0, 0, self.detailTextLabel.frame.size.width, self.detailTextLabel.frame.size.height) inView:self.detailTextLabel permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+                    self.popoverStyleViewController.popoverPresentationController.sourceRect = CGRectMake(0, 0, self.detailTextLabel.frame.size.width, self.detailTextLabel.frame.size.height);
+                    self.popoverStyleViewController.popoverPresentationController.sourceView = self.detailTextLabel;
                 }
                 else{
-                    [self.popoverController presentPopoverFromRect:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height) inView:self permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+                    self.popoverStyleViewController.popoverPresentationController.sourceRect = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+                    self.popoverStyleViewController.popoverPresentationController.sourceView = self;
+
                 }
                 [controller.tableView deselectRowAtIndexPath:[controller.tableView indexPathForCell:self] animated:YES];
 			} else {
@@ -219,14 +228,18 @@
         optionsViewController.title = self.rowDescriptor.selectorTitle;
         
         if ([self.rowDescriptor.rowType isEqualToString:XLFormRowDescriptorTypeMultipleSelectorPopover]) {
-            self.popoverController = [[UIPopoverController alloc] initWithContentViewController:optionsViewController];
-            self.popoverController.delegate = self;
-            optionsViewController.popoverController = self.popoverController;
+            self.popoverStyleViewController = optionsViewController;
+            self.popoverStyleViewController.modalPresentationStyle = UIModalPresentationPopover;
+            [self.popoverStyleViewController.presentingViewController presentViewController:self.popoverStyleViewController animated:YES completion:nil];
+            self.popoverStyleViewController.popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirectionAny;
+            self.popoverStyleViewController.popoverPresentationController.delegate = self;
             if (self.detailTextLabel.window){
-                [self.popoverController presentPopoverFromRect:CGRectMake(0, 0, self.detailTextLabel.frame.size.width, self.detailTextLabel.frame.size.height) inView:self.detailTextLabel permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+                self.popoverStyleViewController.popoverPresentationController.sourceRect = CGRectMake(0, 0, self.detailTextLabel.frame.size.width, self.detailTextLabel.frame.size.height);
+                self.popoverStyleViewController.popoverPresentationController.sourceView = self.detailTextLabel;
             }
             else{
-                [self.popoverController presentPopoverFromRect:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height) inView:self permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+                self.popoverStyleViewController.popoverPresentationController.sourceRect = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+                self.popoverStyleViewController.popoverPresentationController.sourceView = self;
             }
             [controller.tableView deselectRowAtIndexPath:[controller.tableView indexPathForCell:self] animated:YES];
         } else {
@@ -465,9 +478,9 @@
 }
 
 
-#pragma mark - UIPopoverControllerDelegate
+#pragma mark - UIPopoverPresentationControllerDelegate
 
-- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
+- (void)popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)popoverPresentationController
 {
     [self.formViewController.tableView reloadData];
 }
