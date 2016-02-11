@@ -45,7 +45,7 @@
 @synthesize titleHeaderSection = _titleHeaderSection;
 @synthesize titleFooterSection = _titleFooterSection;
 @synthesize rowDescriptor = _rowDescriptor;
-@synthesize popoverController = __popoverController;
+@synthesize popoverStyleViewController = __popoverStyleViewController;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -148,9 +148,9 @@
             self.rowDescriptor.value = cellObject;
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }
-        if (self.popoverController){
-            [self.popoverController dismissPopoverAnimated:YES];
-            [self.popoverController.delegate popoverControllerDidDismissPopover:self.popoverController];
+        if (self.popoverStyleViewController){
+            [self dismissViewControllerAnimated:YES completion:nil];
+            [self.popoverStyleViewController.popoverPresentationController.delegate popoverPresentationControllerDidDismissPopover:self.popoverStyleViewController.popoverPresentationController];
         }
         else if ([self.parentViewController isKindOfClass:[UINavigationController class]]){
             [self.navigationController popViewControllerAnimated:YES];
