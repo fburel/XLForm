@@ -117,12 +117,24 @@
         if ([cellClass isKindOfClass:[NSString class]]) {
             NSBundle *bundle = [NSBundle bundleForClass:(Class)NSClassFromString(cellClass)];
             NSURL *xlFormBundleURL = [bundle URLForResource:@"Resource" withExtension:@"bundle"];
-            NSBundle *xlFormBundle = [[NSBundle alloc]initWithURL:xlFormBundleURL];
+            NSBundle *xlFormBundle = nil;
+            if (xlFormBundleURL != nil) {
+                xlFormBundle = [[NSBundle alloc]initWithURL:xlFormBundleURL];
+            }
             if ([bundle pathForResource:cellClass ofType:@"nib"]){
                 _cell = [[bundle loadNibNamed:cellClass owner:nil options:nil] firstObject];
             }
-            else if ([xlFormBundle pathForResource:cellClass ofType:@"nib"]) {
+            else if ((xlFormBundle !=nil) && ([xlFormBundle pathForResource:cellClass ofType:@"nib"])) {
                 _cell = [[xlFormBundle loadNibNamed:cellClass owner:nil options:nil] firstObject];
+            }
+            else {
+                NSBundle *bundle = [NSBundle bundleWithIdentifier:@"com.ntst.FormKit"];
+                if (bundle != nil) {
+                    if ([bundle pathForResource:cellClass ofType:@"nib"]){
+                        _cell = [[bundle loadNibNamed:cellClass owner:nil options:nil] firstObject];
+                    }
+                }
+                
             }
         } else {
             _cell = [[cellClass alloc] initWithStyle:self.cellStyle reuseIdentifier:nil];
