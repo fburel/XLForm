@@ -258,6 +258,35 @@ NSString *const XLFormTextFieldLengthPercentage = @"textFieldLengthPercentage";
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if ([self.rowDescriptor.rowType isEqualToString:XLFormRowDescriptorTypePhone]) {
+        NSString *newText = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        BOOL deleting = [newText length] < [textField.text length];
+        
+        NSString *stripppedNumber = [newText stringByReplacingOccurrencesOfString:@"[^0-9]" withString:@"" options:NSRegularExpressionSearch range:NSMakeRange(0, [newText length])];
+        NSUInteger digits = [stripppedNumber length];
+        
+        if (digits > 10)
+            stripppedNumber = [stripppedNumber substringToIndex:10];
+        
+        UITextRange *selectedRange = [textField selectedTextRange];
+        NSInteger oldLength = [textField.text length];
+        
+        if (digits == 0)
+            textField.text = @"";
+        else if (digits < 3 || (digits == 3 && deleting))
+            textField.text = [NSString stringWithFormat:@"(%@", stripppedNumber];
+        else if (digits < 6 || (digits == 6 && deleting))
+            textField.text = [NSString stringWithFormat:@"(%@) %@", [stripppedNumber substringToIndex:3], [stripppedNumber substringFromIndex:3]];
+        else
+            textField.text = [NSString stringWithFormat:@"(%@) %@-%@", [stripppedNumber substringToIndex:3], [stripppedNumber substringWithRange:NSMakeRange(3, 3)], [stripppedNumber substringFromIndex:6]];
+        
+        UITextPosition *newPosition = [textField positionFromPosition:selectedRange.start offset:[textField.text length] - oldLength];
+        UITextRange *newRange = [textField textRangeFromPosition:newPosition toPosition:newPosition];
+        [textField setSelectedTextRange:newRange];
+        
+        return NO;
+    }
+    
     return [self.formViewController textField:textField shouldChangeCharactersInRange:range replacementString:string];
 }
 
