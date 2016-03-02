@@ -114,6 +114,7 @@ NSString *const XLFormTextFieldLengthPercentage = @"textFieldLengthPercentage";
     }
     else if ([self.rowDescriptor.rowType isEqualToString:XLFormRowDescriptorTypePhone]){
         self.textField.keyboardType = UIKeyboardTypePhonePad;
+        self.textField.placeholder = @"(###) ###-####";
     }
     else if ([self.rowDescriptor.rowType isEqualToString:XLFormRowDescriptorTypeURL]){
         self.textField.autocorrectionType = UITextAutocorrectionTypeNo;
