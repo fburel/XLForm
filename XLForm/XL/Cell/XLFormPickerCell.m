@@ -28,23 +28,16 @@
 
 @interface XLFormPickerCell() <UIPickerViewDelegate, UIPickerViewDataSource>
 
+@property (readonly) NSArray *options;
+@property (readonly) BOOL optionsAreMultidimensional;
+@property id value;
+
 @end
 
 @implementation XLFormPickerCell
 
 @synthesize pickerView = _pickerView;
 @synthesize inlineRowDescriptor = _inlineRowDescriptor;
-
--(BOOL)formDescriptorCellCanBecomeFirstResponder
-{
-    return (!self.rowDescriptor.isDisabled && (self.inlineRowDescriptor == nil));
-}
-
--(BOOL)formDescriptorCellBecomeFirstResponder
-{
-    return [self becomeFirstResponder];
-}
-
 
 -(BOOL)canResignFirstResponder
 {
@@ -53,7 +46,7 @@
 
 -(BOOL)canBecomeFirstResponder
 {
-    return [self formDescriptorCellCanBecomeFirstResponder];
+    return (self.inlineRowDescriptor == nil);
 }
 
 #pragma mark - Properties
@@ -67,6 +60,35 @@
     return _pickerView;
 }
 
+- (NSArray *)options
+{
+    if (self.inlineRowDescriptor) {
+        return self.inlineRowDescriptor.selectorOptions;
+    }
+    
+    return self.rowDescriptor.selectorOptions;
+}
+
+- (BOOL)optionsAreMultidimensional
+{
+    return [self.options.firstObject isKindOfClass:[NSArray class]];
+}
+
+- (id)value
+{
+    return self.inlineRowDescriptor ? self.inlineRowDescriptor.value : self.rowDescriptor.value;
+}
+
+- (void)setValue:(id)value
+{
+    if (self.inlineRowDescriptor) {
+        self.inlineRowDescriptor.value = value;
+    }
+    else {
+        self.rowDescriptor.value = value;
+    }
+}
+
 #pragma mark - XLFormDescriptorCell
 
 -(void)configure
@@ -74,7 +96,6 @@
     [super configure];
     [self.contentView addSubview:self.pickerView];
     [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.pickerView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[pickerView]-0-|" options:0 metrics:0 views:@{@"pickerView" : self.pickerView}]];
 }
 
 -(void)update
@@ -83,7 +104,24 @@
     BOOL isDisable = self.rowDescriptor.isDisabled;
     self.userInteractionEnabled = !isDisable;
     self.contentView.alpha = isDisable ? 0.5 : 1.0;
-    [self.pickerView selectRow:[self selectedIndex] inComponent:0 animated:NO];
+    if (self.optionsAreMultidimensional) {
+        for (int i=0; i<self.options.count; i++) {
+            id value = [self.value objectAtIndex:i];
+            NSUInteger index = [self indexOfOptionWithValue:value fromOptions:[self.options objectAtIndex:i]];
+            
+            if (index != NSNotFound) {
+                [self.pickerView selectRow:index inComponent:i animated:NO];
+            }
+        }
+    }
+    else {
+        NSUInteger index = [self indexOfOptionWithValue:self.value fromOptions:self.options];
+        
+        if (index != NSNotFound) {
+            [self.pickerView selectRow:index inComponent:0 animated:NO];
+        }
+    }
+    
     [self.pickerView reloadAllComponents];
     
 }
@@ -97,21 +135,22 @@
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    if (self.inlineRowDescriptor){
-        return [[self.inlineRowDescriptor.selectorOptions objectAtIndex:row] displayText];
+    if (self.optionsAreMultidimensional) {
+        return [[[self.options objectAtIndex:component] objectAtIndex:row] displayText];
     }
-    return [[self.rowDescriptor.selectorOptions objectAtIndex:row] displayText];
+    
+    return [[self.options objectAtIndex:row] displayText];
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
+    self.value = [self valueFromComponents];
+    
     if (self.inlineRowDescriptor){
-        self.inlineRowDescriptor.value = [self.inlineRowDescriptor.selectorOptions objectAtIndex:row];
-        [self.formViewController updateFormRow:self.inlineRowDescriptor];
+        [[self.inlineRowDescriptor cellForFormController:self.formViewController] update];
     }
     else{
         [self becomeFirstResponder];
-        self.rowDescriptor.value = [self.rowDescriptor.selectorOptions objectAtIndex:row];
     }
 }
 
@@ -119,31 +158,46 @@
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
+    if (self.optionsAreMultidimensional) {
+        return self.options.count;
+    }
     return 1;
 }
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    if (self.inlineRowDescriptor){
-        return self.inlineRowDescriptor.selectorOptions.count;
+    if (self.optionsAreMultidimensional) {
+        return [[self.options objectAtIndex:component] count];
     }
-    return self.rowDescriptor.selectorOptions.count;
+    
+    return self.options.count;
 }
 
 #pragma mark - helpers
 
--(NSInteger)selectedIndex
+- (id)valueFromComponents
 {
-    XLFormRowDescriptor * formRow = self.inlineRowDescriptor ?: self.rowDescriptor;
-    if (formRow.value){
-        for (id option in formRow.selectorOptions){
-            if ([[option valueData] isEqual:[formRow.value valueData]]){
-                return [formRow.selectorOptions indexOfObject:option];
-            }
+    if (self.optionsAreMultidimensional) {
+        NSMutableArray *values = [NSMutableArray array];
+        
+        for (int component=0; component<self.pickerView.numberOfComponents; component++) {
+            NSInteger row = [self.pickerView selectedRowInComponent:component];
+            [values addObject: [[self.options objectAtIndex:component] objectAtIndex:row]];
         }
+        
+        return values;
     }
-    return -1;
+    
+    NSInteger row = [self.pickerView selectedRowInComponent:0];
+    
+    return [self.options objectAtIndex:row];
 }
 
+-(NSUInteger)indexOfOptionWithValue:(id)value fromOptions:(NSArray *)options
+{
+    return [options indexOfObjectPassingTest:^BOOL(id option, NSUInteger idx, BOOL *stop) {
+        return [[option valueData] isEqual:[value valueData]];
+    }];
+}
 
 @end
