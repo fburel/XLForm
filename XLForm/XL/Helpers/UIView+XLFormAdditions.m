@@ -61,6 +61,7 @@
         }
         return nil;
     }
+    
     if (self.superview) {
         UITableViewCell<XLFormDescriptorCell> * tableViewCell = [self.superview formDescriptorCell];
         if (tableViewCell != nil) {
