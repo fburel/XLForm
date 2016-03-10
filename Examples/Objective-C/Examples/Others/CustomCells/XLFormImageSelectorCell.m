@@ -32,7 +32,7 @@
 NSString *const kFormImageSelectorCellDefaultImage = @"defaultImage";
 NSString *const kFormImageSelectorCellImageRequest = @"imageRequest";
 
-@interface XLFormImageSelectorCell() <UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+@interface XLFormImageSelectorCell() <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @property (nonatomic) UIImage * defaultImage;
 @property (nonatomic) NSURLRequest * imageRequest;
