@@ -29,7 +29,7 @@
 #import "XLFormSelectorCell.h"
 #import "NSArray+XLFormAdditions.h"
 
-@interface XLFormSelectorCell() <UIActionSheetDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UIPopoverPresentationControllerDelegate>
+@interface XLFormSelectorCell() <UIPickerViewDelegate, UIPickerViewDataSource, UIPopoverPresentationControllerDelegate>
 
 @property (nonatomic) UIPickerView * pickerView;
 @property (nonatomic) UIViewController * popoverStyleViewController;
@@ -303,25 +303,6 @@
     [super unhighlight];
     self.detailTextLabel.textColor = _beforeChangeColor;
 }
-
-#pragma mark - UIActionSheetDelegate
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if ([self.rowDescriptor.rowType isEqualToString:XLFormRowDescriptorTypeSelectorActionSheet]){
-        if ([actionSheet cancelButtonIndex] != buttonIndex){
-            NSString * title = [actionSheet buttonTitleAtIndex:buttonIndex];
-            for (id option in self.rowDescriptor.selectorOptions){
-                if ([[option displayText] isEqualToString:title]){
-                    [self.rowDescriptor setValue:option];
-                    [self.formViewController.tableView reloadData];
-                    break;
-                }
-            }
-        }
-    }
-}
-
 
 #pragma mark - UIPickerViewDelegate
 

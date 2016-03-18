@@ -28,7 +28,7 @@
 #import "NSObject+XLFormAdditions.h"
 #import "XLFormLeftRightSelectorCell.h"
 
-@interface XLFormLeftRightSelectorCell() <UIActionSheetDelegate>
+@interface XLFormLeftRightSelectorCell()
 
 @end
 
