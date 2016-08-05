@@ -30,6 +30,8 @@
 
 @interface XLFormOptionsViewController : UITableViewController<XLFormRowDescriptorViewController, XLFormRowDescriptorPopoverViewController>
 
+@property (assign,nonatomic) int maxSelectionCount;
+
 - (id)initWithStyle:(UITableViewStyle)style;
 
 

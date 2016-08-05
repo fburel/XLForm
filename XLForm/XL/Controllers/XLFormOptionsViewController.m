@@ -46,6 +46,7 @@
 @synthesize titleFooterSection = _titleFooterSection;
 @synthesize rowDescriptor = _rowDescriptor;
 @synthesize popoverStyleViewController = __popoverStyleViewController;
+@synthesize maxSelectionCount = _maxSelectionCount;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -53,6 +54,7 @@
     if (self){
         _titleFooterSection = nil;
         _titleHeaderSection = nil;
+        _maxSelectionCount = 0;
     }
     return self;
 }
@@ -63,6 +65,7 @@
     if (self){
         _titleFooterSection = titleFooterSection;
         _titleHeaderSection = titleHeaderSection;
+        _maxSelectionCount = 0;
     }
     return self;
 }
@@ -138,8 +141,10 @@
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
         else{
-            self.rowDescriptor.value = [self selectedValuesAddOption:cellObject];
-            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            if (!(self.maxSelectionCount > 0 && [self.selectedValues count] > self.maxSelectionCount)) {
+                self.rowDescriptor.value = [self selectedValuesAddOption:cellObject];
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            }
         }
     }
     else{
