@@ -141,7 +141,7 @@
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
         else{
-            if (!(self.maxSelectionCount > 0 && [self.selectedValues count] > self.maxSelectionCount)) {
+            if (!(self.maxSelectionCount > 0 && [self.selectedValues count] == self.maxSelectionCount)) {
                 self.rowDescriptor.value = [self selectedValuesAddOption:cellObject];
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
             }
