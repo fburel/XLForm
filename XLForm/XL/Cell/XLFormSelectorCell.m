@@ -198,7 +198,8 @@
             XLFormOptionsViewController * optionsViewController = [[XLFormOptionsViewController alloc] initWithStyle:UITableViewStyleGrouped titleHeaderSection:nil titleFooterSection:nil];
             optionsViewController.rowDescriptor = self.rowDescriptor;
             optionsViewController.title = self.rowDescriptor.selectorTitle;
-			
+            optionsViewController.maxSelectionCount = self.maxSelectionCount;
+
 			if ([self.rowDescriptor.rowType isEqualToString:XLFormRowDescriptorTypeSelectorPopover]) {
                 self.popoverStyleViewController = optionsViewController;
                 self.popoverStyleViewController.modalPresentationStyle = UIModalPresentationPopover;
@@ -226,6 +227,7 @@
         XLFormOptionsViewController * optionsViewController = [[XLFormOptionsViewController alloc] initWithStyle:UITableViewStyleGrouped titleHeaderSection:nil titleFooterSection:nil];
         optionsViewController.rowDescriptor = self.rowDescriptor;
         optionsViewController.title = self.rowDescriptor.selectorTitle;
+        optionsViewController.maxSelectionCount = self.maxSelectionCount;
         
         if ([self.rowDescriptor.rowType isEqualToString:XLFormRowDescriptorTypeMultipleSelectorPopover]) {
             self.popoverStyleViewController = optionsViewController;
