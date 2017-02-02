@@ -116,7 +116,7 @@
         NSAssert(cellClass, @"Not defined XLFormRowDescriptorType: %@", self.rowType ?: @"");
         if ([cellClass isKindOfClass:[NSString class]]) {
             NSBundle *bundle = [NSBundle bundleForClass:(Class)NSClassFromString(cellClass)];
-            NSURL *xlFormBundleURL = [bundle URLForResource:@"NTSTResource" withExtension:@"bundle"];
+            NSURL *xlFormBundleURL = [bundle URLForResource:@"XLResource" withExtension:@"bundle"];
             NSBundle *xlFormBundle = nil;
             if (xlFormBundleURL != nil) {
                 xlFormBundle = [[NSBundle alloc]initWithURL:xlFormBundleURL];
