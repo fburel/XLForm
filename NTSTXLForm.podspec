@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'NTSTXLForm'
-  s.version  = '1.1'
+  s.version  = '1.3'
   s.license  = { :type => 'MIT' }
   s.summary  = 'XLForm is the most flexible and powerful iOS library to create dynamic table-view forms.'
   s.description = <<-DESC
